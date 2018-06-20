@@ -1,0 +1,4 @@
+Define a class with the name Stack.
+
+Once Stack is defined write a programme which gets a string as an input with only parenthesis, brackets and braces
+(e.g ()[{}]() ) and finds out if they all close. The programme should use a stack.
