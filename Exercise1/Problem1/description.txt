@@ -1,0 +1,5 @@
+Do Pacman project P1 of (http://ai.berkeley.edu/search.html)
+
+Kind regard to berkeley university for providing me the necessary files for developing this exercise
+
+Files I have edited search.py, searchAgents.py
