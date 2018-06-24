@@ -117,7 +117,6 @@ def depthFirstSearch(problem):
     discovered = {v:"False"}
     parent = {v:"-1"}
 
-
     while s.isEmpty() == False:
         v = s.pop()
         if discovered[v] == "False":
@@ -150,7 +149,7 @@ def breadthFirstSearch(problem):
     frontier = util.Queue()
     frontier.push(node)
     moves = {}
-    exprored = []
+    explored = set()
     parent = []
     # node:parent dict. Keeps track of the parent
     # for each node
@@ -158,7 +157,7 @@ def breadthFirstSearch(problem):
 
     while frontier.isEmpty() == False:
         node = frontier.pop()
-        exprored.append(node)
+        explored.add(node)
 
         for action in problem.getSuccessors(node):
             # action[0] has the position tsolutionupple i.e (5,4)
@@ -167,7 +166,7 @@ def breadthFirstSearch(problem):
             # one of 'South','West','East',North'
             moves[child,node] = action[1]
 
-            if (child not in exprored) and (child not in frontier.list):
+            if (child not in explored) and (child not in frontier.list):
                 parent[child] = node
                 if problem.isGoalState(child):
                     return solution(parent,child,moves)
@@ -176,7 +175,43 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    moves = {}
+    explored_set = set()
+    parent = []
+    frontier = util.PriorityQueue()
+    node = problem.getStartState()
+
+    frontier.push(node,0)
+    # node:parent dict. Keeps track of the parent
+    # for each node
+    parent = {node:"-1"}
+
+    while frontier.isEmpty() == False:
+        node = frontier.pop()
+
+        if problem.isGoalState(node):
+            return solution(parent,node,moves)
+
+        explored_set.add(node)
+
+        for action in problem.getSuccessors(node):
+            # action[0] has the position tsolutionupple i.e (5,4)
+            child = action[0]
+
+            if (child not in explored_set) and (child not in frontier.heap):
+                parent[child] = node
+                # store the move from parent to child. Move is
+                # one of 'South','West','East',North'
+                moves[child,node] = action[1]
+                frontier.push(child,action[2])
+            elif (child in frontier.heap):
+                # this function checks if the new priority
+                # is greater than the current of the child.
+                # If so, it updates it
+                frontier.update(child,action[2])
+
+
 
 def nullHeuristic(state, problem=None):
     """
