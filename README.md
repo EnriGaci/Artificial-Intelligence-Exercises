@@ -1,1 +1,1 @@
-# Artificial-intelligence-Exercise
+# Artificial-Intelligence-Exercises

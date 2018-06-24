@@ -72,6 +72,27 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
+# @param parent Dict of child:parent values
+# @param moves Dict of (child,parent):move from child to parent
+# @returns result List with moves to perform to reach solution
+def solution(parent,child,moves):
+    """
+    Returns the list of moves to solution\n
+    parent Dict of child:parent values\n
+    child Dict element to start iteration\n
+    moves Dict of (child,parent):move from child to parent\n
+    returns result List with moves to perform to reach solution
+    """
+    # List of directions our agent will follow
+    # i.e ['South','West']
+    result = []
+    current_parent = parent[child]
+    while current_parent != '-1':
+        result.append(moves[child,current_parent])
+        child = current_parent
+        current_parent = parent[child]
+    return list(reversed(result))
+
 def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first.
@@ -87,7 +108,42 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    node = problem.getStartState()
+
+    if problem.isGoalState(node):
+        return True
+
+    frontier = [node]
+    moves = {}
+    exprored = []
+    parent = []
+    # node:parent dict. Keeps track of the parent
+    # for each node
+    parent = {node:"-1"}
+
+    while len(frontier) != 0:
+        node = frontier[0]
+        frontier.remove(node)
+        exprored.append(node)
+
+        for action in problem.getSuccessors(node):
+            # action[0] has the position tsolutionupple i.e (5,4)
+            child = action[0]
+            # store the move from parent to child. Move is
+            # one of 'South','West','East',North'
+            moves[child,node] = action[1]
+
+            if (child not in exprored) and (child not in frontier):
+                parent[child] = node
+                if problem.isGoalState(child):
+                    return solution(parent,child,moves)
+
+                frontier.insert(0,child)
+
+
+    # util.raiseNotDefined()
+
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
