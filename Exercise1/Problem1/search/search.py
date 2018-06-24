@@ -109,12 +109,46 @@ def depthFirstSearch(problem):
     """
     "*** YOUR CODE HERE ***"
 
+    s = util.Stack()
+    v = problem.getStartState()
+    moves = {}
+
+    s.push(v)
+    discovered = {v:"False"}
+    parent = {v:"-1"}
+
+
+    while s.isEmpty() == False:
+        v = s.pop()
+        if discovered[v] == "False":
+            discovered[v] = "True"
+            for action in problem.getSuccessors(v):
+                child = action[0]
+                if problem.isGoalState(child):
+                    parent[child] = v
+                    moves[child,v] = action[1]
+                    return solution(parent,child,moves)
+                try:
+                    if discovered[child]:
+                        discovered[child] = "True"
+                except:
+                    parent[child] = v
+                    moves[child,v] = action[1]
+                    discovered[child] = "False"
+                    s.push(child)
+
+
+
+def breadthFirstSearch(problem):
+    """Search the shallowest nodes in the search tree first."""
+    "*** YOUR CODE HERE ***"
     node = problem.getStartState()
 
     if problem.isGoalState(node):
         return True
 
-    frontier = [node]
+    frontier = util.Queue()
+    frontier.push(node)
     moves = {}
     exprored = []
     parent = []
@@ -122,9 +156,8 @@ def depthFirstSearch(problem):
     # for each node
     parent = {node:"-1"}
 
-    while len(frontier) != 0:
-        node = frontier[0]
-        frontier.remove(node)
+    while frontier.isEmpty() == False:
+        node = frontier.pop()
         exprored.append(node)
 
         for action in problem.getSuccessors(node):
@@ -134,21 +167,11 @@ def depthFirstSearch(problem):
             # one of 'South','West','East',North'
             moves[child,node] = action[1]
 
-            if (child not in exprored) and (child not in frontier):
+            if (child not in exprored) and (child not in frontier.list):
                 parent[child] = node
                 if problem.isGoalState(child):
                     return solution(parent,child,moves)
-
-                frontier.insert(0,child)
-
-
-    # util.raiseNotDefined()
-
-
-def breadthFirstSearch(problem):
-    """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+                frontier.push(child)
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
